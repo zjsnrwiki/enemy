@@ -6,7 +6,7 @@ import jsonformat
 fleetDb = None
 shipDb = None
 equiptName = None
-shipRarity = None
+shipData = None
 
 label = '__ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -14,12 +14,12 @@ def sortDict(d):
     return OrderedDict(sorted(d.items()))
 
 def init():
-    global fleetDb, shipDb, equiptName, shipRarity
+    global fleetDb, shipDb, equiptName, shipData
     fleetDb = json.load(open('fleets.json'), object_pairs_hook = OrderedDict)
     shipDb = json.load(open('ships.json'), object_pairs_hook = OrderedDict)
     t = json.load(open('static.json'))
     equiptName = t['equiptName']
-    shipRarity = t['shipRarity']
+    shipData = t['shipData']
 
 def load(filename):
     f = open(filename)
@@ -66,12 +66,17 @@ def save(node, data):
             fleetDb[node][fid] = f
             fleetDb[node] = sortDict(fleetDb[node])
         elif fleetDb[node][fid] != f:
-            print('!!!!! unmatch fleet data ' + fid + '!!!!!')
+            print('!!!!! unmatch fleet data ' + fid + ' !!!!!')
 
     for ship in ships:
         s = OrderedDict()
-        s['title']  = ship['title']
-        s['rarity'] = shipRarity[str(ship['shipCid'])]
+        data = shipData[str(ship['shipCid'])]
+        s['title']  = data['title']
+        s['rarity'] = data['rarity']
+        s['image']  = data['image']
+        if ship['title'] != data['title']:
+            print('!!!!! unmatch ship name ' + s['title'] + ' !!!!!')
+
         s['type']   = int(ship['type'])
         s['level']  = int(ship['level'])
         s['hp']     = int(ship['hp'])
