@@ -40,7 +40,7 @@ def formatObj(obj, indent):
             comp = comp or c
 
         s = '[ ' + ', '.join(ret) + ' ]'
-        if comp or len(s) > 80:
+        if comp or len(s) > 120:
             s = '[\n  ' + indent + (',\n  ' + indent).join(ret) + '\n' + indent + ']'
         return s, True
 
@@ -61,7 +61,7 @@ def formatObj(obj, indent):
             comp = comp or c
 
         s = '{ ' + ', '.join(ret) + ' }'
-        if comp or len(s) > 80:
+        if comp or len(s) > 120:
             s = '{\n  ' + indent + (',\n  ' + indent).join(ret) + '\n' + indent + '}'
         return s, True
 

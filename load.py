@@ -24,8 +24,16 @@ def load(filename):
     for line in f:
         if lastLine.startswith('GET /pve/deal/'):
             node = lastLine.split('/')[3]
+            node = node[0] + '-' + node[2] + '/' + label[int(node) % 100]
             data = json.loads(line[:-1])
             save(node, data)
+
+        elif lastLine.startswith('GET /campaign/challenge/'):
+            node = lastLine.split('/')[3]
+            node = 'C' + node[0] + '-' + node[2]
+            data = json.loads(line[:-1])
+            save(node, data)
+
         lastLine = line
 
 def end():
@@ -36,10 +44,6 @@ def save(node, data):
     if 'warReport' not in data:
         return
 
-    node = str(node)[0] + '-' + str(node)[2] + '/' + label[int(node) % 100]
-    if node not in fleetDb:
-        fleetDb[node] = [ ]
-
     fleet = data['warReport']['enemyFleet']
     ships = data['warReport']['enemyShips']
 
@@ -48,10 +52,16 @@ def save(node, data):
     f['formation'] = int(fleet['formation'])
     f['ships'] = [ int(s['shipCid']) for s in ships ]
     f['shipNames'] = [ s['title'] for s in ships ]
-    if f not in fleetDb[node]:
-        fleetDb[node].append(f)
-    if len(fleetDb[node]) > 3:
-        print('!!!!! more than 3 fleets ' + node + '!!!!!')
+
+    if node[0] == 'C':
+        fleetDb[node] = f
+    else:
+        if node not in fleetDb:
+            fleetDb[node] = [ ]
+        if f not in fleetDb[node]:
+            fleetDb[node].append(f)
+        if len(fleetDb[node]) > 3:
+            print('!!!!! more than 3 fleets ' + node + '!!!!!')
 
     for ship in ships:
         s = OrderedDict()
@@ -69,14 +79,12 @@ def save(node, data):
         s['rec']    = int(ship['radar'])
         s['speed']  = int(ship['speed'])
         s['range']  = int(ship['range'])
-        s['eq1']    = equiptName[str(ship['equipment'][0])]
-        s['eq2']    = equiptName[str(ship['equipment'][1])]
-        s['eq3']    = equiptName[str(ship['equipment'][2])]
-        s['eq4']    = equiptName[str(ship['equipment'][3])]
-        s['cap1']   = int(ship['capacitySlotMax'][0])
-        s['cap2']   = int(ship['capacitySlotMax'][1])
-        s['cap3']   = int(ship['capacitySlotMax'][2])
-        s['cap4']   = int(ship['capacitySlotMax'][3])
+
+        s['eq'] = [ None, None, None, None ]
+        s['cap'] = [ None, None, None, None ]
+        for i in range(4):
+            s['eq'][i] = equiptName[str(ship['equipment'][i])]
+            s['cap'][i] = int(ship['capacitySlotMax'][i])
         id_ = str(ship['shipCid'])
         if id_ not in shipDb:
             shipDb[id_] = s
