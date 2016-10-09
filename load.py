@@ -8,7 +8,10 @@ shipDb = None
 equiptName = None
 shipRarity = None
 
-label = '_ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+label = '__ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+def sortDict(d):
+    return OrderedDict(sorted(d.items()))
 
 def init():
     global fleetDb, shipDb, equiptName, shipRarity
@@ -37,8 +40,8 @@ def load(filename):
         lastLine = line
 
 def end():
-    jsonformat.save({k:v for k,v in fleetDb.items()}, 'fleets.json')
-    jsonformat.save({k:v for k,v in shipDb.items()}, 'ships.json')
+    jsonformat.save(sortDict(fleetDb), 'fleets.json')
+    jsonformat.save(sortDict(shipDb), 'ships.json')
 
 def save(node, data):
     if 'warReport' not in data:
@@ -57,11 +60,13 @@ def save(node, data):
         fleetDb[node] = f
     else:
         if node not in fleetDb:
-            fleetDb[node] = [ ]
-        if f not in fleetDb[node]:
-            fleetDb[node].append(f)
-        if len(fleetDb[node]) > 3:
-            print('!!!!! more than 3 fleets ' + node + '!!!!!')
+            fleetDb[node] = { }
+        fid = str(fleet['id'])
+        if fid not in fleetDb[node]:
+            fleetDb[node][fid] = f
+            fleetDb[node] = sortDict(fleetDb[node])
+        elif fleetDb[node][fid] != f:
+            print('!!!!! unmatch fleet data ' + fid + '!!!!!')
 
     for ship in ships:
         s = OrderedDict()
