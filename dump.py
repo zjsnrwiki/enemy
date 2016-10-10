@@ -10,7 +10,7 @@ def dump(inf, outf):
             out.write(block.split(b'\r\n', 1)[0])
             out.write(b'\n')
 
-        elif block.startswith(b'pve_level'):
+        elif block.startswith(b'pve_level') or block.startswith(b'content={"'):
             out.write(block.split(b'HTTP/', 1)[0])
             out.write(b'\n')
 
