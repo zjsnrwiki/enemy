@@ -21,15 +21,29 @@ def init():
     equiptName = t['equiptName']
     shipData = t['shipData']
 
+def formatNode(node):
+    n = str(node)
+    return n[0] + '-' + n[2] + '/' + label[int(n) % 100]
+
 def load(filename):
     f = open(filename)
     lastLine = ''
+    curNode = None
     for line in f:
-        if lastLine.startswith('GET /pve/deal/'):
+        if lastLine.startswith('GET /pve/newNext/'):
+            curNode = formatNode(json.loads(line[:-1])['node'])
+
+        elif lastLine.startswith('GET /pve/deal/'):
             node = lastLine.split('/')[3]
             node = node[0] + '-' + node[2] + '/' + label[int(node) % 100]
             data = json.loads(line[:-1])
-            save(node, data)
+            if 'warReport' in data:
+                save(node, data['warReport'])
+
+        elif lastLine.startswith('GET /pve/spy/'):
+            data = json.loads(line[:-1])
+            if 'enemyVO' in data:
+                save(curNode, data['enemyVO'])
 
         elif lastLine.startswith('GET /campaign/challenge/'):
             node = lastLine.split('/')[3]
@@ -44,11 +58,8 @@ def end():
     jsonformat.save(sortDict(shipDb), 'ships.json')
 
 def save(node, data):
-    if 'warReport' not in data:
-        return
-
-    fleet = data['warReport']['enemyFleet']
-    ships = data['warReport']['enemyShips']
+    fleet = data['enemyFleet']
+    ships = data['enemyShips']
 
     f = OrderedDict()
     f['title'] = fleet['title']
