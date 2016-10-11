@@ -1,12 +1,14 @@
 ## fleets.json 和 ships.json ##
 
-舰队数据中 `Cx-y` 表示战役, 比如 `C2-2` 表示巡洋困难
+敌方编队和敌舰属性
+
+编队数据中 `Cx-y` 表示战役, 比如 `C2-2` 表示巡洋困难
 
 其他的应该不需要解释
 
 ## load.py ##
 
-将文本格式的战斗数据导入数据库
+将文本格式的战斗数据导入 `fleets.json` 和 `ships.json`
 
     python load.py [文件名1] [文件名2] ...
 
@@ -18,7 +20,7 @@
     GET /pve/deal/40308/4/2/......
     {"shipVO":[{"id":......
 
-事实上本程序只处理 `/pve/deal` 和 `/campaign/challenge` 这两类请求, 其他数据的格式并不影响
+本程序只处理 `/pve/newNext/`(索敌), `/pve/deal`(白天战斗), `/campaign/challenge`(战役) 这几类请求, 其他数据的格式并不影响
 
 ## decode.py ##
 
