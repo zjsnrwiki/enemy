@@ -20,13 +20,13 @@
 
 事实上本程序只处理 `/pve/deal` 和 `/campaign/challenge` 这两类请求, 其他数据的格式并不影响
 
-## dump.py ##
+## decode.py ##
 
-我自用的解码工具, 可能不适用于其他抓包工具
+为 packet capture 导出格式做的解码工具, 可能不适用于其他抓包工具
 
-    python dump.py [输入文件名] [输出文件名]
+    python decode.py [输入文件名] [输出文件名]
 
-文件格式为一块 http 请求跟一块 http 回复. 例:
+输入文件格式为一块 http 请求跟一块 http 回复. 例:
 
     GET /pve/getWarResult/0/......
     Accept-Encoding: identity
@@ -46,6 +46,22 @@
     0
     
     GET /pve/newNext/......
+
+## wiki.py ##
+
+将 `ships.json` 和 `fleets.json` 的内容转换成 wiki module 用的格式
+
+    python wiki.py
+
+生成的 `enemy.lua` 内容复制粘贴至[模块:敌舰数据](http://www.zjsnrwiki.com/wiki/模块:敌舰数据)
+
+建议更新 wiki 前先与 [github](https://github.com/zjsnrwiki/enemy) merge 数据
+
+## run.sh ##
+
+给 *nix 系统用的一键式脚本, 假设 dump 的数据保存在 android 设备上的 download 目录
+
+    ./run.sh <文件名>
 
 ## static.json ##
 

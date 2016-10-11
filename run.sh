@@ -1,5 +1,6 @@
-adb pull /sdcard/download/d$1 .
-python dump.py d$1 $1
-python load.py $1
+adb pull /sdcard/download/$1 .
+python decode.py $1 $1_decode
+python load.py $1_decode
 python wiki.py
-mv d$1 $1 data
+mkdir -p data
+mv $1 $1_decode data
