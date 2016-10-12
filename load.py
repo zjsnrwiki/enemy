@@ -23,7 +23,10 @@ def init():
 
 def formatNode(node):
     n = str(node)
-    return n[0] + '-' + n[2] + '/' + label[int(n) % 100]
+    if len(n) == 5:
+        return n[0] + '-' + n[2] + '/' + label[int(n[4:])]
+    else:
+        return n[:-2] + '/' + label[int(n[-2:])]
 
 def load(filename):
     f = open(filename)
@@ -34,8 +37,7 @@ def load(filename):
             curNode = formatNode(json.loads(line[:-1])['node'])
 
         elif lastLine.startswith('GET /pve/deal/'):
-            node = lastLine.split('/')[3]
-            node = node[0] + '-' + node[2] + '/' + label[int(node) % 100]
+            node = formatNode(lastLine.split('/')[3])
             data = json.loads(line[:-1])
             if 'warReport' in data:
                 save(node, data['warReport'])
