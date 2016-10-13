@@ -24,7 +24,7 @@ def init():
 def formatNode(node):
     n = str(node)
     if len(n) == 5:
-        return n[0] + '-' + n[2] + '/' + label[int(n[4:])]
+        return n[0] + '-' + n[2] + '/' + label[int(n[3:])]
     else:
         return n[:-2] + '/' + label[int(n[-2:])]
 
@@ -50,7 +50,7 @@ def load(filename):
         elif lastLine.startswith('GET /campaign/challenge/'):
             node = lastLine.split('/')[3]
             node = 'C' + node[0] + '-' + node[2]
-            data = json.loads(line[:-1])
+            data = json.loads(line[:-1])['warReport']
             save(node, data)
 
         lastLine = line
