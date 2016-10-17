@@ -79,7 +79,7 @@ def save(node, data):
             fleetDb[node][fid] = f
             fleetDb[node] = sortDict(fleetDb[node])
         elif fleetDb[node][fid] != f:
-            print('!!!!! unmatch fleet data ' + fid + ' !!!!!')
+            print('!!!!! unmatch fleet data ' + node + ' !!!!!')
 
     for ship in ships:
         s = OrderedDict()
