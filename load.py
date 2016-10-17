@@ -43,6 +43,8 @@ def load(filename):
                 save(node, data['warReport'])
 
         elif lastLine.startswith('GET /pve/spy/'):
+            if curNode is None:
+                continue
             data = json.loads(line[:-1])
             if 'enemyVO' in data:
                 save(curNode, data['enemyVO'])
