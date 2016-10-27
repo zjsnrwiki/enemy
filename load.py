@@ -44,6 +44,7 @@ def load(filename):
 
         elif lastLine.startswith('GET /pve/spy/'):
             if curNode is None:
+                lastLine = ''
                 continue
             data = json.loads(line[:-1])
             if 'enemyVO' in data:
