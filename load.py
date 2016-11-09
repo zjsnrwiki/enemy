@@ -81,6 +81,7 @@ def save(node, data):
         if fid not in fleetDb[node]:
             fleetDb[node][fid] = f
             fleetDb[node] = sortDict(fleetDb[node])
+            print('New fleet:', node, f['shipNames'])
         elif fleetDb[node][fid] != f:
             print('!!!!! unmatch fleet data ' + node + ' !!!!!')
 
@@ -114,6 +115,7 @@ def save(node, data):
         id_ = str(ship['shipCid'])
         if id_ not in shipDb:
             shipDb[id_] = s
+            print('New ship:', s['title'])
         elif shipDb[id_] != s:
             print('!!!!! unmatch ship data ' + ship['title'] + '!!!!!')
 
